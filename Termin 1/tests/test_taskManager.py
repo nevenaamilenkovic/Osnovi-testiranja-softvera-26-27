@@ -79,4 +79,14 @@ def test_obrisi_bolja_varijanta():
     assert baza.broj()==0
 
 """
+Zadatak 5: Napisati test metode zapocni(), kartica u bazi nakon pozivanja metode treba da ima stanje u_toku
 """
+def test_zapocni():
+    # arrange
+    baza=BazaKartica()
+    kartica=Kartica(vlasnik="Nevena",opis="zapocni test")
+    id=baza.dodaj(kartica)
+    # act
+    baza.zapocni(id)
+    # assert
+    assert baza.uzmi(id).stanje=="u_toku"
