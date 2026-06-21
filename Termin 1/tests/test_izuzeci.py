@@ -143,10 +143,21 @@ def test_izvuci_prvi_TypeError():
 # Napisati test koji proverava da BazaKartica.obrisi() baca KeyError,
 # i da poruka greske sadrzi ID koji ste pokusali da obrisete (npr. 777).
 # Hint: KeyError poruka se nalazi u exc_info.value.args[0]
- 
- 
+from src.taskManager import BazaKartica,Kartica
+def test_obrisi_KeyError():
+    baza=BazaKartica()
+    with pytest.raises(KeyError) as exc_info:
+        baza.obrisi(777)
+    assert "777" in exc_info.value.args[0]#args[0] vraca cist string args je tuple sa jednim elementom u nasem slucaju to je poruka prvi i jedini element
+    # assert "777" in str(exc_info.value)#vraca "'neki tekst'" sa dodatnim nevodnicima jer KeyError tako formatira poruku ponekad to moze da pokvari in proveru
+    # assert "KeyError" in exc_info.typename#ovako moze da se proveri opet tip greske sto je sada suvisno :D
+
 # Zadatak 9 
 # Napisati test koji proverava DVE stvari za uzrast_u_kategoriju(200):
 #   1. da baca ValueError
 #   2. da poruka sadrzi rec "150"
 # Ali ovaj put bez match= — sacuvaj exc_info i proveriti rucno sa assert.
+def test_uzrast_u_kategoriju():
+    with pytest.raises(ValueError):
+        poruka=uzrast_u_kategoriju(150)
+        assert "150" in poruka
