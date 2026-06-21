@@ -45,3 +45,17 @@ SAV KOD KOJI BACA EXCEPTION MORA DA BUDE UNUTAR WITH BLOKA!!!
 """
 
 # VEZBA
+# pocetni aplikacioni kod koji se testira bi u praksi bio u zasevnom fajlu
+def podeli(a:float,b:float)->float:
+    # Podeli a sa b baca ValueError ako je b nula!
+    if(b==0):
+        raise ValueError("delilac ne sme biti nula")
+    return a/b
+
+def uzrast_u_kategoriju(godine:int)->str:
+    # pretvara broj fodina u kategoriju npr maloletnik, odrasla osoba ili senior/penzioner haha
+    # baca TypeError ako godine nisu int
+    # ako su godine negativne ili vece od 115(nisam sigurna da li je neko poziveo vise od 115 godina hahah) vaca ValueError!
+    if not isinstance(godine,int):
+        raise TypeError(f"ocekuje se ceo broj, a dobijen je {type(godine).__name__}")
+    return "senior"
