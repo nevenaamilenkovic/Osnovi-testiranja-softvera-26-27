@@ -32,16 +32,26 @@ exc_info.value je sam exception objekat! moze da se ispituje poruka,atributi ili
 """
 
 # jedna od cescih gresaka je pogresan redosled
-# assert van bloka with, samim tim se exception nikada NE HVATA!
 """
-npr.
-with pytest.raises(ValueError):
-    x=5
-assert neka_funkcija(-1) #ovo se izvrsava, ali exception koji neka_funkcija moze da baci nije uhvacen
-tako da je ispravno:
-with pytest.raises(ValueError):
-    assert neka_funkcija(-1) 
-SAV KOD KOJI BACA EXCEPTION MORA DA BUDE UNUTAR WITH BLOKA!!!
+PRAVILO: Unutar with bloka ide SAMO poziv funkcije koja baca exception.
+Sve ostale provere idu ISPOD with bloka.
+POGRESNO — assert van with bloka (exception nije uhvacen):
+    with pytest.raises(ValueError):
+        x = 5
+    assert neka_funkcija(-1)   #exception odavde NIJE uhvacen!
+
+POGRESNO — assert unutar with bloka (nikad se ne izvrsi):
+    with pytest.raises(ValueError):
+        assert neka_funkcija(-1)   #exception baca pre assert-a, assert se preskace
+ 
+ISPRAVNO — samo poziv funkcije unutar with bloka:
+    with pytest.raises(ValueError):
+        neka_funkcija(-1)
+ 
+ISPRAVNO — ako treba i provera poruke, koristiti exc_info ispod bloka:
+    with pytest.raises(ValueError) as exc_info:
+        neka_funkcija(-1)
+    assert "neka rec" in str(exc_info.value)   #ovo se izvrsava nakon with bloka
 """
 
 # VEZBA
@@ -87,7 +97,8 @@ def izvuci_prvi(lista:list):
 import pytest
 def test_podeli_valueError():
     with pytest.raises(ValueError):
-        assert podeli(4,0)
+        podeli(4,0)
+        # assert podeli(4,0)#ovo je greska!!!! pazite
  
 # Zadatak 2 
 # Napisati test koji proverava da podeli() NORMALNO radi kada su oba broja validna.
@@ -98,8 +109,8 @@ def test_podeli_normalno():
 # Zadatak 3 
 # Napisati test koji proverava da izvuci_prvi() baca IndexError za praznu listu.
 def test_izvuci_prvi_prazna_lista():
+    lista=list()#arrange uvek van with blokaa
     with pytest.raises(IndexError):
-        lista=list()
         assert izvuci_prvi(lista)
 
  
@@ -108,14 +119,14 @@ def test_izvuci_prvi_prazna_lista():
 # kada prosledite string umesto int (npr. "dvadeset").
 def test_uzrast_u_kategoriju_TypeError():
     with pytest.raises(TypeError):
-        assert uzrast_u_kategoriju("dvadeset")
+        uzrast_u_kategoriju("dvadeset")
  
 # Zadatak 5 
 # Napisati test koji proverava da uzrast_u_kategoriju() baca ValueError
 # i da poruka greske SADRZI rec "negativne" — kada prosledite -1.
 def test_uzrast_u_kategoriju_ValueError():
     with pytest.raises(ValueError,match="negativne"):
-        assert uzrast_u_kategoriju(-3)
+        uzrast_u_kategoriju(-3)
  
 # Zadatak 6 
 # Napisati dva testa u klasi TestUzrast:
@@ -126,7 +137,7 @@ class TestUzrast():
         assert uzrast_u_kategoriju(17)=="maloletnik"
     def test_valueError(self):
         with pytest.raises(ValueError):
-            assert uzrast_u_kategoriju(-5)
+            uzrast_u_kategoriju(-5)
 
 # Zadatak 7 
 # Napisati test koji proverava da izvuci_prvi() baca TypeError
@@ -134,9 +145,9 @@ class TestUzrast():
 # Zatim sacuvajte exception u exc_info i proverite da poruka sadrzi
 # rec "lista" koristeci str(exc_info.value)
 def test_izvuci_prvi_TypeError():
-    tuple=(1,2,3)
+    tapl=(1,2,3)
     with pytest.raises(TypeError) as exc_info:
-        izvuci_prvi(tuple)
+        izvuci_prvi(tapl)
     assert "lista" in str(exc_info.value)
 
 # Zadatak 8 
@@ -150,7 +161,7 @@ def test_obrisi_KeyError():
         baza.obrisi(777)
     assert "777" in exc_info.value.args[0]#args[0] vraca cist string args je tuple sa jednim elementom u nasem slucaju to je poruka prvi i jedini element
     # assert "777" in str(exc_info.value)#vraca "'neki tekst'" sa dodatnim nevodnicima jer KeyError tako formatira poruku ponekad to moze da pokvari in proveru
-    # assert "KeyError" in exc_info.typename#ovako moze da se proveri opet tip greske sto je sada suvisno :D
+    # assert "KeyError" in exc_info.typename#ovako moze da se proveri opet tip greske sto je sada suvisno :D a moze i sa exc_info.type.__name__ to je ispravnije
 
 # Zadatak 9 
 # Napisati test koji proverava DVE stvari za uzrast_u_kategoriju(200):
@@ -158,6 +169,6 @@ def test_obrisi_KeyError():
 #   2. da poruka sadrzi rec "150"
 # Ali ovaj put bez match= — sacuvaj exc_info i proveriti rucno sa assert.
 def test_uzrast_u_kategoriju():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exc_info:
         poruka=uzrast_u_kategoriju(150)
-        assert "150" in poruka
+    assert "115" in str(exc_info.value)
