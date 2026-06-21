@@ -19,7 +19,7 @@ def test_prva_kartica():
     assert baza.broj() == 1
 
 """
-Metoda dodaj() iz klase BazaKartica vraca id novokreirane kartice.
+Zadatak 2: Metoda dodaj() iz klase BazaKartica vraca id novokreirane kartice.
 Potrebno je napisati test koji proverava da li ID koji je 
 vratila metoda dodaj zaista postoji u bazi.
 Hint: metoda uzmi() vraca karticu iz baze po id-ju
@@ -32,5 +32,21 @@ def test_dodaj_karticu():
     id_dodate_kartice=baza.dodaj(kartica)
     kartica_iz_baze=baza.uzmi(id_dodate_kartice)
     # Assert
-    assert id_dodate_kartice==kartica_iz_baze.id
-    assert kartica==kartica_iz_baze
+    # ovde imamo dve varijante provere, obe su okej
+    # Samo sto dataclass kartica poredi polja vlasnik,stanje,opis a id ignorise
+    assert id_dodate_kartice==kartica_iz_baze.id#da li vraceni id postoji u bazi
+    assert kartica==kartica_iz_baze#da li su podaci kartice ispravno sacuvani
+
+"""
+Zadatak 3: Napisati test koji proverava metodu uzmi(),
+potrebno je proveriti da li metoda baca KeyError kada se trazi
+kartica sa ID-jem koji ne postoji u bazi
+"""
+import pytest
+def test_uzmi_nepostojeci_id():
+    # arrange
+    baza=BazaKartica()
+    #act i assert
+    with pytest.raises(KeyError):
+        baza.uzmi(999)
+
