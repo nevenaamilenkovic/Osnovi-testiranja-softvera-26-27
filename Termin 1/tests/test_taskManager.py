@@ -63,3 +63,20 @@ def test_obrisi():
     baza.obrisi(1)
     # assert
     assert baza.broj()==0
+"""
+Bolja varijanta resenja za zadatak 4
+u prvom testu imamo tzv slabost, jer se pretpostavlja da ce uvek id da bude 1 (ok je ali nije sigurno app moze da se menja)
+Najbolje je sacuvati id koji vrati metoda dodaj pa tek onda brisati
+"""
+def test_obrisi_bolja_varijanta():
+        # arrange
+    baza=BazaKartica()
+    kartica=Kartica(vlasnik="Nevena",stanje="na_cekanju",opis="zadatak 4")
+    id=baza.dodaj(kartica)
+    # act
+    baza.obrisi(id)
+    # assert
+    assert baza.broj()==0
+
+"""
+"""
