@@ -84,40 +84,61 @@ def izvuci_prvi(lista:list):
  
 # Zadatak 1 
 # Napisati test koji proverava da podeli() baca ValueError kada je b=0.
- 
+import pytest
+def test_podeli_valueError():
+    with pytest.raises(ValueError):
+        assert podeli(4,0)
  
 # Zadatak 2 
 # Napisati test koji proverava da podeli() NORMALNO radi kada su oba broja validna.
 # (ovde ne testirate exception — testirate ispravan rezultat)
- 
+def test_podeli_normalno():
+    assert podeli(4,2)==2
  
 # Zadatak 3 
 # Napisati test koji proverava da izvuci_prvi() baca IndexError za praznu listu.
- 
+def test_izvuci_prvi_prazna_lista():
+    with pytest.raises(IndexError):
+        lista=list()
+        assert izvuci_prvi(lista)
+
  
 # Zadatak 4 
 # Napisati test koji proverava da uzrast_u_kategoriju() baca TypeError
 # kada prosledite string umesto int (npr. "dvadeset").
- 
+def test_uzrast_u_kategoriju_TypeError():
+    with pytest.raises(TypeError):
+        assert uzrast_u_kategoriju("dvadeset")
  
 # Zadatak 5 
 # Napisati test koji proverava da uzrast_u_kategoriju() baca ValueError
 # i da poruka greske SADRZI rec "negativne" — kada prosledite -1.
- 
+def test_uzrast_u_kategoriju_ValueError():
+    with pytest.raises(ValueError,match="negativne"):
+        assert uzrast_u_kategoriju(-3)
  
 # Zadatak 6 
 # Napisati dva testa u klasi TestUzrast:
 #   - jedan koji proverava da 17 vraca "maloletnik"
 #   - jedan koji proverava da -5 baca ValueError
- 
- 
+class TestUzrast():
+    def test_maloletnik(self):
+        assert uzrast_u_kategoriju(17)=="maloletnik"
+    def test_valueError(self):
+        with pytest.raises(ValueError):
+            assert uzrast_u_kategoriju(-5)
+
 # Zadatak 7 
 # Napisati test koji proverava da izvuci_prvi() baca TypeError
 # kada prosledite tuple umesto liste: (1, 2, 3)
 # Zatim sacuvajte exception u exc_info i proverite da poruka sadrzi
 # rec "lista" koristeci str(exc_info.value)
- 
- 
+def test_izvuci_prvi_TypeError():
+    tuple=(1,2,3)
+    with pytest.raises(TypeError) as exc_info:
+        izvuci_prvi(tuple)
+    assert "lista" in str(exc_info.value)
+
 # Zadatak 8 
 # Napisati test koji proverava da BazaKartica.obrisi() baca KeyError,
 # i da poruka greske sadrzi ID koji ste pokusali da obrisete (npr. 777).
