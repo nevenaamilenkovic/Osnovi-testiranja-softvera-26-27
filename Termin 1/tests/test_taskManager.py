@@ -50,3 +50,16 @@ def test_uzmi_nepostojeci_id():
     with pytest.raises(KeyError):
         baza.uzmi(999)
 
+"""
+Zadatak 4: Napisati test za metodu obrisi(). Potreno je proveriti da li metoda
+broj() nakon brisanja kartice vraca 0.
+"""
+def test_obrisi():
+    # arrange
+    baza=BazaKartica()
+    kartica=Kartica(vlasnik="Nevena",stanje="na_cekanju",opis="zadatak 4")
+    baza.dodaj(kartica)
+    # act
+    baza.obrisi(1)
+    # assert
+    assert baza.broj()==0
