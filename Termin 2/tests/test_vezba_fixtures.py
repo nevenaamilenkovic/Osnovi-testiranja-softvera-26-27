@@ -87,3 +87,15 @@ class TestZapocniZavrsiScopeClass:
         assert popunjena_baza_klasni.uzmi(prva_id).stanje=="zavrseno"#prethodni test zavrsio zadatak
         # dakle promene se prenose!!! scope=class se koristi samo kada testovi namerno zavise jedni od drugih
         # pytest .\tests\test_vezba_fixtures.py::TestZapocniZavrsiScopeClass -v --setup-show TEARDOWN TEK POSLE POSLEDNJEG TESTA!!!!!
+
+# takodje moguce je da jedan FIXTURE koristi drugi FIXTURE
+# OVO TREBA U CONFTEST DA IDE ALI EVO OVDE PRIMERA RADI
+import pytest
+@pytest.fixture()
+def kartica_u_bazi(prazna_baza_conftest):
+    kartica_id=prazna_baza_conftest.dodaj(Kartica(opis="Test kartica"))
+    return prazna_baza_conftest,kartica_id
+
+def test_fixture_u_fixture(kartica_u_bazi):
+    baza,id=kartica_u_bazi
+    assert baza.uzmi(id).opis=="Test kartica"
