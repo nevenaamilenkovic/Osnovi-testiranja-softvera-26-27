@@ -27,7 +27,8 @@ def prazna_baza():
 def test_broj_prazna_baza(prazna_baza):#koristi fixture!!
     # sam fixture se "trazi" kada se postavi kao parametar test funkcije!
     assert prazna_baza.broj()==0
-
+    
+"""
 # fixture koji moze biti jako korisan!
 # baza koja je popunjena sa test podacima kako ne bi morali da je popunjavamo unutar testa
 # vrati bazu sa cetiri kartice
@@ -49,6 +50,7 @@ def popunjena_baza():
     # u teardown delu bi se zatvarala konekcija i sl
     print("\nBaza je ociscena")
     # Sve pre yield-a je SETUP, a sve nakon je TEARDOWN
+"""
 
 """
 SCOPE->pokretanje fixtura u nasem slucaju, tj koliko se cesto fixture pokrece!
