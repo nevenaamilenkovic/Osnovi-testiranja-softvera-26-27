@@ -1,6 +1,6 @@
 # Za organizaciju testova u pytestu se koriste klase,
 # mozete da ih posmatrate kao fascikle za srodne testove, nista vise
-# ne treba nam ni dunder metoda init, nema polimorfizma!!!
+# ne treba nam ni dunder metoda init, nema polimorfizma i nasledjivanja!!!
 
 from src.taskManager import BazaKartica,Kartica
 class TestBazaKartica:
