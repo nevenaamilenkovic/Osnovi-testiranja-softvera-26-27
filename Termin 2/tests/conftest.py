@@ -41,3 +41,15 @@ def popunjena_baza():
     # u teardown delu bi se zatvarala konekcija i sl
     print("\nBaza je ociscena")
     # Sve pre yield-a je SETUP, a sve nakon je TEARDOWN
+
+
+# scope class fixture -> jedna te ista baza za celu klasu
+@pytest.fixture(scope="class")
+def popunjena_baza_klasni():
+    baza=BazaKartica()
+    baza.dodaj(Kartica(opis="Uvod u pytest", vlasnik="Nevena"))
+    baza.dodaj(Kartica(opis="Selenium", vlasnik="Nevena"))
+    baza.dodaj(Kartica(opis="Python", vlasnik="Dusan"))
+    baza.dodaj(Kartica(opis="C prograrmiranje", vlasnik="Dusan"))
+    yield baza
+    print("\nBaza je ociscena")

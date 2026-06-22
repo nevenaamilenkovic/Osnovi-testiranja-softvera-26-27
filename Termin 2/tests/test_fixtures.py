@@ -66,3 +66,5 @@ def test_broj(popunjena_baza):
 # Kako bi bilo moguce da vise test FAJLOVA koriste isti fixture javlja se potreba zaa centralizacijom
 # U zaseban fajl koji se tacno zove conftest.py smestate fixture
 # nije potreban import jer ga pytest sam ucita (mislim na conftest.py)
+
+
