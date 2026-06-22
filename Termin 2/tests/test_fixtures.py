@@ -60,3 +60,7 @@ SCOPE->pokretanje fixtura u nasem slucaju, tj koliko se cesto fixture pokrece!
 # kada radite sa bazom uvek se koristi function scope da bi svaki test imao svezu praznu bazu!!!
 def test_broj(popunjena_baza):
     assert popunjena_baza.broj()==4
+
+# Kako bi bilo moguce da vise test FAJLOVA koriste isti fixture javlja se potreba zaa centralizacijom
+# U zaseban fajl koji se tacno zove conftest.py smestate fixture
+# nije potreban import jer ga pytest sam ucita (mislim na conftest.py)
