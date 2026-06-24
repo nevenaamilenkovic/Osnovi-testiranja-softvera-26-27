@@ -61,9 +61,10 @@ def test_biblioteka_sa_knjigama(biblioteka_sa_knjigama):
     assert biblioteka_sa_knjigama.broj_dostupnih()==3
 
 # Zadatak 7
-# Napisati test koji proverava da trazi_po_autoru("Dostojevski")
+# Napisati test koji proverava da trazi_po_autoru("Dr Snezana R. Popovic")
 # vraca tacno 2 knjige iz biblioteka_sa_knjigama.
-
+def test_biblioteka_sa_knjigama_pretrazi(biblioteka_sa_knjigama):
+    assert len(biblioteka_sa_knjigama.trazi_po_autoru("Dr Snezana R. Popovic"))==2
 
 # GRUPA 3 — Pozajmljivanje i vracanje knjiga
 # Koristiti fixture: biblioteka_sa_knjigama, biblioteka_sa_pozajmljenom
