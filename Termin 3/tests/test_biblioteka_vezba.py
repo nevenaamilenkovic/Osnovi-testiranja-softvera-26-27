@@ -1,16 +1,28 @@
 # GRUPA 1 — Knjiga dataclass
 # Fixture nije potreban — testira se samo objekat u izolaciji
-
+from src.biblioteka import Knjiga
 # Zadatak 1
 # Napisati test koji proverava da Knjiga kreirana sa svim argumentima
 # ima ispravne vrednosti svih polja, i da je podrazumevano dostupna=True.
-
+def test_knjiga():
+    # arrange
+    knjiga=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970)
+    # act, assert
+    assert knjiga.naslov=="Proces"
+    assert knjiga.autor=="Dostojevski"
+    assert knjiga.godina==1970
+    assert knjiga.dostupna
+    assert knjiga.id==None
 
 # Zadatak 2
 # Napisati test koji proverava da dve Knjige sa istim podacima
 # (isti naslov, autor, godina, dostupna) ali razlicitim ID-jem
 # JESU jednake. (pogledajte kako je id definisan u dataclass-u)
-
+def test_dve_knjige():
+    k1=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=1)
+    k2=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=2)
+    # id se ne poredi!!
+    assert k1==k2
 
 # Zadatak 3
 # Napisati test koji proverava da dve Knjige sa razlicitim dostupna
