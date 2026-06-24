@@ -6,11 +6,11 @@ from src.biblioteka import Knjiga
 # ima ispravne vrednosti svih polja, i da je podrazumevano dostupna=True.
 def test_knjiga():
     # arrange
-    knjiga=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970)
+    knjiga=Knjiga(naslov="Proces",autor="Kafka",godina=1914)
     # act, assert
     assert knjiga.naslov=="Proces"
-    assert knjiga.autor=="Dostojevski"
-    assert knjiga.godina==1970
+    assert knjiga.autor=="Kafka"
+    assert knjiga.godina==1914
     assert knjiga.dostupna
     assert knjiga.id==None
 
@@ -19,8 +19,8 @@ def test_knjiga():
 # (isti naslov, autor, godina, dostupna) ali razlicitim ID-jem
 # JESU jednake. (pogledajte kako je id definisan u dataclass-u)
 def test_dve_knjige_razlicit_id():
-    k1=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=1)
-    k2=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=2)
+    k1=Knjiga(naslov="Proces",autor="Kafka",godina=1914,id=1)
+    k2=Knjiga(naslov="Proces",autor="Kafka",godina=1914,id=2)
     # id se ne poredi!!
     assert k1==k2
 
@@ -28,8 +28,8 @@ def test_dve_knjige_razlicit_id():
 # Napisati test koji proverava da dve Knjige sa razlicitim dostupna
 # vrednostima (jedna True, druga False) NISU jednake.
 def test_dve_knjige_razlicita_dostupnost():
-    k1=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,dostupna=True)
-    k2=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,dostupna=False)
+    k1=Knjiga(naslov="Proces",autor="Kafka",godina=1914,dostupna=True)
+    k2=Knjiga(naslov="Proces",autor="Kafka",godina=1914,dostupna=False)
     # id se ne poredi!!
     assert k1!=k2
 
