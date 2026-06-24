@@ -49,11 +49,16 @@ def test_prazna_biblioteka_dodate_knjige(prazna_biblioteka):
     knjiga_id=prazna_biblioteka.dodaj_knjigu(Knjiga(naslov="Test knjiga",autor="Test autor",godina=2026))
     assert prazna_biblioteka.broj_knjiga()==1
     assert prazna_biblioteka.uzmi_knjigu(knjiga_id).naslov=="Test knjiga"
+    assert prazna_biblioteka.uzmi_knjigu(knjiga_id).autor=="Test autor"
+    assert prazna_biblioteka.uzmi_knjigu(knjiga_id).godina==2026
+
 
 # Zadatak 6
-# Napisati test koji proverava da biblioteka_sa_knjigama ima tacno 4 knjige
-# i da su sve 4 dostupne (broj_dostupnih() == 4).
-
+# Napisati test koji proverava da biblioteka_sa_knjigama ima tacno 3 knjige
+# i da su sve 3 dostupne (broj_dostupnih() == 3).
+def test_biblioteka_sa_knjigama(biblioteka_sa_knjigama):
+    assert biblioteka_sa_knjigama.broj_knjiga()==3
+    assert biblioteka_sa_knjigama.broj_dostupnih()==3
 
 # Zadatak 7
 # Napisati test koji proverava da trazi_po_autoru("Dostojevski")
