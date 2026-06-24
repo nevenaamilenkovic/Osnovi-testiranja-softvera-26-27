@@ -18,7 +18,7 @@ def test_knjiga():
 # Napisati test koji proverava da dve Knjige sa istim podacima
 # (isti naslov, autor, godina, dostupna) ali razlicitim ID-jem
 # JESU jednake. (pogledajte kako je id definisan u dataclass-u)
-def test_dve_knjige():
+def test_dve_knjige_razlicit_id():
     k1=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=1)
     k2=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,id=2)
     # id se ne poredi!!
@@ -27,19 +27,28 @@ def test_dve_knjige():
 # Zadatak 3
 # Napisati test koji proverava da dve Knjige sa razlicitim dostupna
 # vrednostima (jedna True, druga False) NISU jednake.
-
+def test_dve_knjige_razlicita_dostupnost():
+    k1=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,dostupna=True)
+    k2=Knjiga(naslov="Proces",autor="Dostojevski",godina=1970,dostupna=False)
+    # id se ne poredi!!
+    assert k1!=k2
 
 # GRUPA 2 — Osnovna upotreba biblioteke
 # Koristiti fixture: prazna_biblioteka, biblioteka_sa_knjigama
+# fixtures su u conftest.py
 
 # Zadatak 4
 # Napisati test koji proverava da prazna biblioteka ima 0 knjiga.
-
+def test_prazna_biblioteka(prazna_biblioteka):
+    assert prazna_biblioteka.broj_knjiga()==0
 
 # Zadatak 5
 # Napisati test koji proverava da nakon dodavanja knjige u praznu biblioteku,
 # broj_knjiga() vraca 1 i ta knjiga se moze pronaci pomocu uzmi_knjigu().
-
+def test_prazna_biblioteka_dodate_knjige(prazna_biblioteka):
+    knjiga_id=prazna_biblioteka.dodaj_knjigu(Knjiga(naslov="Test knjiga",autor="Test autor",godina=2026))
+    assert prazna_biblioteka.broj_knjiga()==1
+    assert prazna_biblioteka.uzmi_knjigu(knjiga_id).naslov=="Test knjiga"
 
 # Zadatak 6
 # Napisati test koji proverava da biblioteka_sa_knjigama ima tacno 4 knjige
