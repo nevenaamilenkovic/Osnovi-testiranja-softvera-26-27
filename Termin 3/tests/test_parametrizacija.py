@@ -33,3 +33,4 @@ import pytest
 ])
 def test_broj_u_rec(ulaz,ocekivano):
     assert broj_u_rec(ulaz)==ocekivano
+    # na ovaj nacin dobili smo 3 testa, iste funkcije ali sa razlicitim ulaznim i izlaznim podacima
