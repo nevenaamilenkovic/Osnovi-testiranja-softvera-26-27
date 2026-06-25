@@ -131,7 +131,7 @@ def test_uzmi_greska(biblioteka_sa_knjigama):
     nepostojeci_id=999
     with pytest.raises(KeyError) as ex:
         biblioteka_sa_knjigama.uzmi_knjigu(nepostojeci_id)
-    assert str(nepostojeci_id) in str(ex.value)
+    assert str(nepostojeci_id) in ex.value.args[0]
 
 # Zadatak 13
 # Napisati test koji proverava da dodaj_knjigu() baca ValueError
