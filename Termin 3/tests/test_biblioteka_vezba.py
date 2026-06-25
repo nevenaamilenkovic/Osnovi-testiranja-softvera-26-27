@@ -174,8 +174,24 @@ class TestPozajmljivanje:
 #   test 3: vrati knjigu, proveri da je ponovo dostupna
 class TestPozajmljivanjeScope:
     def test_pozajmi_prvu(self,biblioteka_sa_knjigama_class):
-        pass
+        b=biblioteka_sa_knjigama_class
+        prva=b.sve_knjige()[0].id
+        b.pozajmi(prva)
+        print("\npozajmljena")
+        print(f"\nStatus: {b.uzmi_knjigu(prva).dostupna}")
+        assert not b.uzmi_knjigu(prva).dostupna
+
     def test_pozajmi_prvu_opet(self,biblioteka_sa_knjigama_class):
-        pass
+        b=biblioteka_sa_knjigama_class
+        prva=b.sve_knjige()[0].id
+        with pytest.raises(ValueError) as ex:
+            b.pozajmi(prva)
+        print(f"\nPoruka: {str(ex.value)}")
+
     def test_vrati_prvu(self,biblioteka_sa_knjigama_class):
-        pass
+        b=biblioteka_sa_knjigama_class
+        prva=b.sve_knjige()[0].id
+        b.vrati(prva)
+        print("\npozajmljena")
+        print(f"\nStatus: {b.uzmi_knjigu(prva).dostupna}")
+        assert b.uzmi_knjigu(prva).dostupna
