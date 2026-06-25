@@ -105,6 +105,13 @@ def test_vrati_knjigu(biblioteka_sa_pozajmljenom):
 # kada pokusate da pozajmite knjigu koja je vec pozajmljena.
 # Proveri i da poruka greske sadrzi naslov te knjige.
 # Koristi biblioteka_sa_pozajmljenom.
+import pytest
+def test_pozajmljena_greska(biblioteka_sa_pozajmljenom):
+    pozajmljena,b=biblioteka_sa_pozajmljenom
+    naslov=b.uzmi_knjigu(pozajmljena).naslov
+    with pytest.raises(ValueError) as ex:
+        b.pozajmi(pozajmljena)
+    assert naslov in str(ex.value)
 
 
 # GRUPA 4 — Greske i izuzeci
