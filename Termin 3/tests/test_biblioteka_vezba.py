@@ -73,8 +73,15 @@ def test_biblioteka_sa_knjigama_pretrazi(biblioteka_sa_knjigama):
 # Napisati test koji proverava kompletan ciklus pozajmljivanja:
 #   1. Pozajmi prvu knjigu
 #   2. Proveri da knjiga vise nije dostupna
-#   3. Proveri da broj_dostupnih() opao za 1 (sa 4 na 3)
-
+#   3. Proveri da broj_dostupnih() opao za 1 (sa 3 na 2)
+def test_pozajmi_knjigu(biblioteka_sa_knjigama):
+    # pozajmi
+    prva_knjiga=biblioteka_sa_knjigama.sve_knjige()[0].id
+    biblioteka_sa_knjigama.pozajmi(prva_knjiga)
+    # Provera dostupnosti
+    assert not biblioteka_sa_knjigama.uzmi_knjigu(prva_knjiga).dostupna
+    # provera dostupnih
+    assert len(biblioteka_sa_knjigama.dostupne_knjige())==2
 
 # Zadatak 9
 # Napisati test koji proverava kompletan ciklus vracanja:
