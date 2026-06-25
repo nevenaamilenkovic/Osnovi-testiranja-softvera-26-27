@@ -119,17 +119,27 @@ def test_pozajmljena_greska(biblioteka_sa_pozajmljenom):
 # Zadatak 11
 # Napisati test koji proverava da vrati() baca ValueError
 # kada pokusas da vratis knjigu koja nije bila pozajmljena.
-
+def test_vrati_greska(biblioteka_sa_knjigama):
+    k_vracanje=biblioteka_sa_knjigama.sve_knjige()[0].id
+    with pytest.raises(ValueError):
+        biblioteka_sa_knjigama.vrati(k_vracanje)
 
 # Zadatak 12
 # Napisati test koji proverava da uzmi_knjigu() baca KeyError
 # za nepostojeci ID, i da poruka sadrzi taj ID.
-
+def test_uzmi_greska(biblioteka_sa_knjigama):
+    nepostojeci_id=999
+    with pytest.raises(KeyError) as ex:
+        biblioteka_sa_knjigama.uzmi_knjigu(nepostojeci_id)
+    assert str(nepostojeci_id) in str(ex.value)
 
 # Zadatak 13
 # Napisati test koji proverava da dodaj_knjigu() baca ValueError
 # kada knjiga nema naslov (prazan string "").
-
+def test_dodaj_greska(prazna_biblioteka):
+    k=Knjiga(naslov="",autor="test",godina=2024)
+    with pytest.raises(ValueError):
+        prazna_biblioteka.dodaj_knjigu(k)
 
 # GRUPA 5 — Klase i scope
 
@@ -137,7 +147,24 @@ def test_pozajmljena_greska(biblioteka_sa_pozajmljenom):
 # Grupisati zadatke 8 i 9 u klasu TestPozajmljivanje.
 # Svaki test treba da bude nezavistan — koristi function scope fixture
 # (biblioteka_sa_knjigama) tako da svaki test pocinje sa svezom bibliotekom.
-
+class TestPozajmljivanje:
+    def test_pozajmi_knjigu(self,biblioteka_sa_knjigama):
+        # pozajmi
+        prva_knjiga=biblioteka_sa_knjigama.sve_knjige()[0].id
+        biblioteka_sa_knjigama.pozajmi(prva_knjiga)
+        # Provera dostupnosti
+        assert not biblioteka_sa_knjigama.uzmi_knjigu(prva_knjiga).dostupna
+        # provera dostupnih
+        assert len(biblioteka_sa_knjigama.dostupne_knjige())==2
+    def test_vrati_knjigu(self,biblioteka_sa_pozajmljenom):
+        # fixture vraca tapl mora da se raspakujee
+        pozajmljena,b=biblioteka_sa_pozajmljenom
+        # vracamo knjigu
+        b.vrati(pozajmljena)
+        # da li je dostupna
+        assert b.uzmi_knjigu(pozajmljena).dostupna
+        # ukupan broj dostupnih treba da bude 3
+        assert b.broj_dostupnih()==3
 
 # Zadatak 15
 # Napraviti klasu TestPozajmljivanjeScope sa scope="class" fixture-om.
@@ -145,3 +172,10 @@ def test_pozajmljena_greska(biblioteka_sa_pozajmljenom):
 #   test 1: pozajmi prvu knjigu, proveri da nije dostupna
 #   test 2: pokusaj da pozajmis istu knjigu ponovo — ocekuj ValueError
 #   test 3: vrati knjigu, proveri da je ponovo dostupna
+class TestPozajmljivanjeScope:
+    def test_pozajmi_prvu(self,biblioteka_sa_knjigama_class):
+        pass
+    def test_pozajmi_prvu_opet(self,biblioteka_sa_knjigama_class):
+        pass
+    def test_vrati_prvu(self,biblioteka_sa_knjigama_class):
+        pass
