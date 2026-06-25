@@ -15,4 +15,8 @@ def biblioteka_sa_knjigama(prazna_biblioteka):
     yield b
     print("Biblioteka ociscena")
 
-
+@pytest.fixture()
+def biblioteka_sa_pozajmljenom(biblioteka_sa_knjigama):
+    za_zajam_id=biblioteka_sa_knjigama.sve_knjige()[0].id
+    biblioteka_sa_knjigama.pozajmi(za_zajam_id)
+    yield za_zajam_id,biblioteka_sa_knjigama

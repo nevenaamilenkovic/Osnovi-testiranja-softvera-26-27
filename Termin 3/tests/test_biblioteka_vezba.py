@@ -88,8 +88,17 @@ def test_pozajmi_knjigu(biblioteka_sa_knjigama):
 # Koristiti biblioteka_sa_pozajmljenom (knjiga je vec pozajmljena).
 #   1. Vrati tu pozajmljenu knjigu
 #   2. Proveri da je knjiga ponovo dostupna
-#   3. Proveri da je broj_dostupnih() ponovo 4
-
+#   3. Proveri da je broj_dostupnih() ponovo 3
+def test_vrati_knjigu(biblioteka_sa_pozajmljenom):
+    # fixture vraca tapl mora da se raspakujee
+    pozajmljena,b=biblioteka_sa_pozajmljenom
+    # vracamo knjigu
+    b.vrati(pozajmljena)
+    # da li je dostupna
+    assert b.uzmi_knjigu(pozajmljena).dostupna
+    # ukupan broj dostupnih treba da bude 3
+    assert b.broj_dostupnih()==3
+            
 
 # Zadatak 10
 # Napisati test koji proverava da pozajmi() baca ValueError
