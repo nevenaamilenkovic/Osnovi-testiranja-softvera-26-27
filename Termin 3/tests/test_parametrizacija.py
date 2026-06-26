@@ -132,3 +132,4 @@ def test_knjige_imaju_naslov_i_autora(knjiga):
     assert knjiga.naslov !=""
     assert knjiga.autor!=""
 
+# kombinovanje fixture-a i parametrizacije
