@@ -64,8 +64,6 @@ from src.funkcije import kategorija_godina
 
 
 
-
-
 # Testovi za ekvivalentne klasee
 # Vrednosti koje prolaze kroz isti put u kodu cine jjednu ekvivalentnu klasuu
 # te je dovoljno testirati jednu po klasi
@@ -81,3 +79,56 @@ from src.funkcije import kategorija_godina
 # to je tehnika koja se primenjuje na UNIT i INTEGRATION testove
 # unit test i parametrizacija-> ista izolovana funkcija, a vise ulaza
 # integration test i parametrizacija -> isti scenario a razliciti podaci
+
+
+# jedan test, vise ulaznih vrednost!
+@pytest.mark.parametrize("godine,ocekivano",[
+    (0,"maloletnik"),
+    (17,"maloletnik"),
+    (18,"odrasla osoba"),
+    (64,"odrasla osoba"),
+    (65,"senior"),
+    (100,"senior"),
+])
+def test_kategorija_godine(godine,ocekivano):
+    assert kategorija_godina(godine)==ocekivano
+# u suprotnom, bez parametrizacije nesto ovako:
+# def test_dete():
+#   assert kategorija_godine(5)  == "maloletnik"
+# def test_tinejdzer():
+#   assert kategorija_godine(17) == "maloletnik"
+# def test_odrasla():
+#   assert kategorija_godine(18) == "odrasla osoba"
+
+# parametrizacija sa ocekivanim izuzecima
+@pytest.mark.parametrize("godine,tip_greske",[
+    (-1,ValueError),
+    (200,ValueError),
+    ("dvadeset",TypeError),
+    (3.5,TypeError),
+])
+def test_kategorija_godine_greske(godine,tip_greske):
+    with pytest.raises(tip_greske):
+        kategorija_godina(godine)
+
+#parametrizacija sa fixture-om
+# isti test nad vise razlicitih objekata
+from src.biblioteka import Knjiga,Biblioteka
+@pytest.fixture(params=[
+    Knjiga(naslov="Python",  autor="Paul Barry",          godina=2017),
+    Knjiga(naslov="SQL",     autor="Dr Snezana Popovic",  godina=2020),
+    Knjiga(naslov="",  autor="William Vincent",     godina=2022),
+])
+def knjiga(request):
+    # request se koristi da prosledi informacije test funkciji
+    # obicno i najcesce se koristi kod fixture parametrizacije
+    return request.param#vraca po jednu knjigu iz liste
+
+def test_sve_knjige_su_dostupne_po_defaultu(knjiga):
+    assert knjiga.dostupna is True
+    # test se pokrece tri puta, po jednom za svaku knjigu u fixtureu
+
+def test_knjige_imaju_naslov_i_autora(knjiga):
+    assert knjiga.naslov !=""
+    assert knjiga.autor!=""
+
