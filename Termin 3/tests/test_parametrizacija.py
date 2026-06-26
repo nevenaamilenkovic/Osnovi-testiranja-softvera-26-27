@@ -133,3 +133,14 @@ def test_knjige_imaju_naslov_i_autora(knjiga):
     assert knjiga.autor!=""
 
 # kombinovanje fixture-a i parametrizacije
+@pytest.fixture()
+def prazna_biblioteka():
+    return Biblioteka(naziv="Test biblioteka")
+
+@pytest.mark.parametrize("naslov,autor,godina",[
+    ("SQL programiranje","Dr Snezana R. Popovic",2020)
+    ("Baze podataka","Dr Snezana R. Popovic",2024),
+    ("Python bez oklevanja","Paul Barry",2017),
+])
+def test_dodaj_razlicite_knjige(prazna_biblioteka,naslov,autor,godina):
+    pass
