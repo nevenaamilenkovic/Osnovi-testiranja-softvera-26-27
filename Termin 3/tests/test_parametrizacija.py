@@ -138,9 +138,16 @@ def prazna_biblioteka():
     return Biblioteka(naziv="Test biblioteka")
 
 @pytest.mark.parametrize("naslov,autor,godina",[
-    ("SQL programiranje","Dr Snezana R. Popovic",2020)
+    ("SQL programiranje","Dr Snezana R. Popovic",2020),
     ("Baze podataka","Dr Snezana R. Popovic",2024),
     ("Python bez oklevanja","Paul Barry",2017),
 ])
 def test_dodaj_razlicite_knjige(prazna_biblioteka,naslov,autor,godina):
-    pass
+    # test proverava da li se svaka knjiga ispravno dodaje u biblioteku
+    kId=prazna_biblioteka.dodaj_knjigu(
+        Knjiga(naslov=naslov,autor=autor,godina=godina)
+    )
+    pronadjena=prazna_biblioteka.uzmi_knjigu(kId)
+    assert pronadjena.naslov==naslov
+    assert pronadjena.autor==autor
+    assert pronadjena.godina==godina
