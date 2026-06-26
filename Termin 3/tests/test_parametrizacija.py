@@ -51,3 +51,33 @@ def test_ime_nije_prazno(ime):
 # Testovi na granicne vrednosti
 # Granicne vresnosti su vazne jer se greske najcesce kriju na granicama uslova
 # u folderu src imate fajl funkcije.py gde se nalaze funkcije koje ce ovde dalje biti testirane
+# Za pokazni primer mozemo napisati test za funkciju kategorija_godina
+from src.funkcije import kategorija_godina
+# tu ima dosta "materijala" za parametrizaciju
+# 17 posledja vrednost koja daje "maloletnik"
+# 18 prva vrednost koja daje "odrasla osoba"
+# 0 minimalna validnaa vrednost
+# -1 prva nevalidna vrednost
+# 150 maksimalna validna vrednost
+# 151 prva vrednost iznad maksimuma
+# Parametrizacija testova za ovu funkciju omogucava da na lak nacin testiramo sve granicne vrednosti bez ponavljanja koda!
+
+
+
+
+
+# Testovi za ekvivalentne klasee
+# Vrednosti koje prolaze kroz isti put u kodu cine jjednu ekvivalentnu klasuu
+# te je dovoljno testirati jednu po klasi
+# npr. opet kod funkcije godine
+# godine < 0       → ValueError       (klasa 1 — nevalidne negativne)
+# 0 ≤ godine < 18  → "maloletnik"     (klasa 2)
+# 18 ≤ godine < 65 → "odrasla osoba"  (klasa 3)
+# 65 ≤ godine ≤ 150→ "senior"         (klasa 4)
+# godine > 150     → ValueError       (klasa 5 — nevalidne velike)
+# ovde parametrizacija omogucava da pokrijemo sve klase u jednoj test funkciji!!
+
+# PARAMETRIZACIJA NIJE POSEBNA VRSTA TESTA!!!
+# to je tehnika koja se primenjuje na UNIT i INTEGRATION testove
+# unit test i parametrizacija-> ista izolovana funkcija, a vise ulaza
+# integration test i parametrizacija -> isti scenario a razliciti podaci
