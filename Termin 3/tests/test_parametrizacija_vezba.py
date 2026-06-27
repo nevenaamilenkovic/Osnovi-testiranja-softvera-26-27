@@ -37,19 +37,44 @@ def test_kategorije_nevalidne(godine,greska):
 # "dvadeset", 3.5, None, True
 # Hint: True je bool, a bool je podklasa int u Pythonu
 # da li kategorija_godina(True) baca TypeError ili ne? Probajtee!
-
+@pytest.mark.parametrize("godine,greska",[
+    ("dvadeset",TypeError),
+    (3.5,TypeError),
+    (None,TypeError),
+    (True,TypeError),
+])
+def test_kategorije_losi_tipovi(godine,greska):
+    with pytest.raises(greska):
+        kategorija_godina(godine)
 
 # Ocene: 1-nedovoljan, 2-dovoljan, 3-dobar, 4-vrlodobar, 5-odlican
 # Zadatak 4
 # Napisite parametrizovan test koji proverava SVE validne ocene (1-5)
 # i njihove odgovarajuce tekstove.
-
+from src.funkcije import ocena_u_rec
+@pytest.mark.parametrize("ocena,znacenje",[
+    (1,"nedovoljan"),
+    (2,"dovoljan"),
+    (3,"dobar"),
+    (4,"vrlodobar"),
+    (5,"odlican"),
+])
+def test_ocene_validne(ocena,znacenje):
+    assert ocena_u_rec(ocena)==znacenje
 
 # Zadatak 5
 # Napisite parametrizovan test koji proverava da ocene van opsega
 # bacaju ValueError: 0, 6, -1, 100
-
-
+@pytest.mark.parametrize("ocena,greska",[
+    (0,ValueError),
+    (6,ValueError),
+    (-1,ValueError),
+    (100,ValueError),
+])
+def test_ocene_van_opsega(ocena,greska):
+    with pytest.raises(greska):
+        ocena_u_rec(ocena)
+        
 # popust_po_godinama()
 # Deca (0-17): 20% popusta, Odrasli (18-64): bez popusta, Penzioneri (65-120): 30%
 # Zadatak 6
