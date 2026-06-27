@@ -1,18 +1,36 @@
 # testiraju se funkcije iz funkcije.py
-
+import pytest
+from src.funkcije import kategorija_godina
 # Kategorije: 0-17 "maloletnik", 18-64 "odrasla osoba", 65-150 "senior"
 # Zadatak 1
 # Napisite parametrizovan test za VALIDNE vrednosti.
 # Obavezno pokrijte sve granicne vrednosti:
 #   0, 17, 18, 64, 65, 150
 # i po jednu vrednost iz sredine svake kategorije.
-
+@pytest.mark.parametrize("godine,kategorija",[
+    (0,"maloletnik"),
+    (17,"maloletnik"),
+    (18,"odrasla osoba"),
+    (64,"odrasla osoba"),
+    (65,"senior"),
+    (150,"senior"),
+])
+def test_kategorije_validne(godine,kategorija):
+    assert kategorija_godina(godine)==kategorija
 
 # Zadatak 2
 # Napisite parametrizovan test za NEVALIDNE vrednosti koje bacaju ValueError:
 #   -1, 151, -100, 200
 # Hint: sve treba da bacaju ValueError tj. tip greske je isti za sve
-
+@pytest.mark.parametrize("godine,greska",[
+    (-1,ValueError),
+    (151,ValueError),
+    (-100,ValueError),
+    (200,ValueError),
+])
+def test_kategorije_nevalidne(godine,greska):
+    with pytest.raises(greska):
+        kategorija_godina(godine)
 
 # Zadatak 3
 # Napisite parametrizovan test za NEVALIDNE tipove koji bacaju TypeError:
