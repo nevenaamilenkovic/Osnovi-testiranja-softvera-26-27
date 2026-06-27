@@ -74,7 +74,7 @@ def test_ocene_validne(ocena,znacenje):
 def test_ocene_van_opsega(ocena,greska):
     with pytest.raises(greska):
         ocena_u_rec(ocena)
-        
+
 # popust_po_godinama()
 # Deca (0-17): 20% popusta, Odrasli (18-64): bez popusta, Penzioneri (65-120): 30%
 # Zadatak 6
@@ -82,13 +82,34 @@ def test_ocene_van_opsega(ocena,greska):
 # Pokrijte sve tri kategorije i granicne vrednosti.
 # Primer jednog slucaja: (10, 100.0, 80.0) — dete, cena 100, sa popustom 80
 # Napisite najmanje 6 test slucajeva.
+from src.funkcije import popust_po_godinama
+@pytest.mark.parametrize("godine,cena,cena_sa_popustom",[
+    (0,100.0,80.0),
+    (17,100.0,80.0),
+    (18,100.0,100.0),
+    (64,100.0,100.0),
+    (65,100.0,70.0),
+    (120,100.0,70.0),
+])
+def test_popust_validno(godine,cena,cena_sa_popustom):
+    assert popust_po_godinama(godine,cena)==cena_sa_popustom
+
 
 
 # Zadatak 7
 # Napisite parametrizovan test koji proverava greske:
 # negativna cena baca ValueError
 # godine van opsega (npr. -1, 121) bacaju ValueError
+@pytest.mark.parametrize("godine,cena,greska",[
+    (-1,100.0,ValueError),
+    (121,100,ValueError),
+    (18,-100.0,ValueError),
+    # (16,0.0,ValueError), ovde nece da baci valueeroor svakako nije negativna cena 0.00
 
+])
+def test_popust_nevalidno(godine,cena,greska):
+    with pytest.raises(greska):
+        popust_po_godinama(godine,cena)
 
 # Zadatak 8
 # Napisitee parametrizovan test za VALIDNE username-ove koji vraca True.
