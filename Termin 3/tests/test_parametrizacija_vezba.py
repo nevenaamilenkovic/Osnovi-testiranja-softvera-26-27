@@ -41,7 +41,7 @@ def test_kategorije_nevalidne(godine,greska):
     ("dvadeset",TypeError),
     (3.5,TypeError),
     (None,TypeError),
-    (True,TypeError),
+    (True,TypeError),#true==1!!
 ])
 def test_kategorije_losi_tipovi(godine,greska):
     with pytest.raises(greska):
