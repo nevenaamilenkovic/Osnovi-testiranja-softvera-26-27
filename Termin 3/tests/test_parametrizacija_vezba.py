@@ -115,13 +115,31 @@ def test_popust_nevalidno(godine,cena,greska):
 # Napisitee parametrizovan test za VALIDNE username-ove koji vraca True.
 # Pokrijte: normalan username, sa brojevima, sa donjom crtom,
 # minimalna duzina (3), maksimalna duzina (20 karaktera).
-
+from src.funkcije import validan_username
+@pytest.mark.parametrize("username,vrednost",[
+    ("str",True),#minimalna duzina
+    ("nevenamilenkovicraf1",True),#maksimalna duzina
+    ("ynevenay",True),#normalan username
+    ("nmilenkovic1121s",True),#sa brojevima
+    ("nevena_milenkovic",True),#sa donjom crtom
+])
+def test_username_validan(username,vrednost):
+    assert validan_username(username)==vrednost
 
 # Zadatak 9
 # Napisite parametrizovan test za NEVALIDNE username-ove koji vraca False.
 # Pokrijte: prekratak (2 slova), predugacak (21 slovo),
 # pocinje brojem, sadrzi specijalan karakter (@, -, razmak).
-
+@pytest.mark.parametrize("username,vrednost",[
+    ("nm",False),#prekratak
+    ("nevenamilenkovicraf12",False),#predugacak
+    ("1ynevenay",False),#pocinje brojem
+    ("nmilenkovic1121s@",False),#specijalan katakter @
+    ("nevena milenkovic",False),#razmak
+    ("nevena-milenkovic",False),#crta
+])
+def test_username_nevalidan(username,vrednost):
+    assert validan_username(username)==vrednost
 
 # Zadatak 10
 # Napisite parametrizovan test koji proverava TypeError
