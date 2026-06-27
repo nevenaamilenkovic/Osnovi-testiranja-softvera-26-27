@@ -144,5 +144,40 @@ def test_username_nevalidan(username,vrednost):
 # Zadatak 10
 # Napisite parametrizovan test koji proverava TypeError
 # kada username nije string: 123, 3.14, None, ["lista"]
+@pytest.mark.parametrize("username,greska",[
+    (123,TypeError),#int
+    (3.14,TypeError),#float
+    (None,TypeError),#none
+    (["lista"],TypeError),#lista
+    (True,TypeError),#bool
+])
+def test_username_nevalidan_tip(username,greska):
+    with pytest.raises(greska):
+        validan_username(username)
+
 # Zatim ga kombinujte sa Zadatkom 9 u jednu klasu TestValidanUsername
 # koja ima oba testa kao metode.
+class TestValidanUsername:
+    # zadatak 9
+    @pytest.mark.parametrize("username,vrednost",[
+        ("nm",False),#prekratak
+        ("nevenamilenkovicraf12",False),#predugacak
+        ("1ynevenay",False),#pocinje brojem
+        ("nmilenkovic1121s@",False),#specijalan katakter @
+        ("nevena milenkovic",False),#razmak
+        ("nevena-milenkovic",False),#crta
+    ])
+    def test_username_nevalidan(self,username,vrednost):
+        assert validan_username(username)==vrednost
+    # zadatak 10
+    @pytest.mark.parametrize("username,greska",[
+        (123,TypeError),#int
+        (3.14,TypeError),#float
+        (None,TypeError),#none
+        (["lista"],TypeError),#lista
+        (True,TypeError),#bool
+    ])
+    def test_username_nevalidan_tip(self,username,greska):
+        with pytest.raises(greska):
+            validan_username(username)
+    # pytest .\test_parametrizacija_vezba.py::TestValidanUsername -v
