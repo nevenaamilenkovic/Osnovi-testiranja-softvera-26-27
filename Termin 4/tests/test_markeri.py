@@ -2,7 +2,7 @@ import pytest,sys,time
 from src.funkcije import kategorija_godina,ocena_u_rec,validan_username
 
 # skip i skipif
-# marker da preskocimo testiranje funkcije koja jos uvek nije implementirana
+# marker da preskocimo testiranje funkcije koja jos uvek nije implementirana i slicno, takodje mozemo i uslovno da preskacemo testove sa skipif
 @pytest.mark.skip(reason="funkcija placanje() jos uvek nije implementirana")
 def test_placanje():
     assert placanje(100)=="uspesno"
@@ -18,3 +18,12 @@ def test_match_naredba():
         case 3: rezultat="tri"
         case 4: rezultat="nepoznato"
     assert rezultat == "tri"
+
+# xfail -> kada se ocekuje da test padne
+@pytest.mark.xfail(reason="bug kategorija_godina(True) treba da baci TypeError")
+def test_bool_kao_godine():
+    # test pada jer bool prolazi proveru isinstance(_,int)
+    # svakako bool nije isto sto i celi broj
+    # kada se bug na funkciji kategorija_godina() popravi test ce postati xpass()
+    with pytest.raises(TypeError):
+        kategorija_godina(True)
