@@ -27,3 +27,6 @@ def test_bool_kao_godine():
     # kada se bug na funkciji kategorija_godina() popravi test ce postati xpass()
     with pytest.raises(TypeError):
         kategorija_godina(True)
+
+def test_koji_mora_da_padne():
+    assert 1==2
