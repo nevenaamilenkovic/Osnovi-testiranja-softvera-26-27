@@ -44,6 +44,11 @@ def test_pozajmi_vrati_init(popunjena_biblioteka):
 # Markirati test sa regression
 # Bug #1: funkcija trazi_po_autoru() nije radila case-insensitive pretragu
 # Napisati test koji proverava da "dostojevski"(sve malim slovima) pronalazi Dostojevskog tj knjigu Zlocin i kazna Fjodor Dostojevski 1866
+@pytest.mark.regression
+def test_trazi_po_autoru_case_insensitive(popunjena_biblioteka):
+    rezultat=popunjena_biblioteka.trazi_po_autoru("dostojevski")
+    pass
+
 
 # Zadatak 2 G2
 # Markirati test sa regression
