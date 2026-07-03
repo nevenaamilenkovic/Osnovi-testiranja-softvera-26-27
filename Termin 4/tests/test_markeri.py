@@ -133,3 +133,115 @@ def test_dodaj_razlicite_knjige(prazna_biblioteka,naslov,autor,godina):
 # pytest test_markeri.py -v -m "smoke or regression" SAMO SMOKE ILI REGRESSION TESTOVI AKO IMA I SMOKE I REGRESSION POKRENUCE OBE VRSTE, AKO IMA SSAMO SMOKE ONNDA SAMO SMOKE POKRECE, ZA REGRESSIO VAZI ISTO
 # IZMEDJU JE LOGICKO ILI!!!
 # pytest test_markeri.py -v --runxfail POKRECE SVE TESTOVE UKLJUCUJUCI I ONE KOJI SU MARKIRANI SA XFAIL SASVIM NORMALNO!
+# pytest test_markeri.py -v --collect-only -m smoke vidi tacno koji testovi imaju koji marker 
+#--collect-only pokauje koji testovi bi se pokrenuli bez da ih zapravo pokrene sto je idealno za proveru markera/filtera pre pravog pokretanja
+# output(zapravo svi smoke testovi koje imamo u fajlu):
+# <Package tests>
+#   <Module test_markeri.py>
+#     <Function test_kategorija_osnovna>
+#     <Function test_ocena_osnovna>
+
+
+# takodje prilikom pokretanja testova bez -v u outputu svaki test(markirani) se prikzuje kao jedan karakter
+# pytest test_markeri.py
+"""
+collected 19 items                                                               
+test_markeri.py .s.xx.........F....  
+"""
+# simbol    naziv     kada se pojavljuje
+# .         PASSED    test je prosao
+# F         FAILED    test je pao assert nije true
+# s         SKIPPED   test je preskocen(ima skip marker ili skipif pa je uslov tacan)
+# x         XFAIL     test pada i to je ocekivano
+# X         XPASS     test je prosao ali to nije trebalo tj nije ocekivano da prodje
+# E         ERROR     izuzetak u fixtureu npr, ali ne u testu!!!
+
+# sa -v (verbose) vidimo pun naziv i status pored svakog testa
+
+# filteri
+"""
+-m filter - logicki operatori
+not - sve osim
+primer:
+pytest -v -m "not smoke"
+pokrece sve testove koji nemaju marker smoke
+korisno kada zelimo da zaobidjemo samo jednu vrstu testaili kada test dugo traje
+
+or - jedan ili drugi
+primer:
+pytest -v -m "validacija or greske"
+pokrece testove koji imaju marker validacija ili greske marker(ili oba)
+
+and - mora imati oba
+primer:
+pytest -v -m "validacija and smoke"
+pokrece samo testove koji imaju i validacija i smoke marker,dakle pokrece oba odjednom ako je uslov true
+npr u ovom fajlu ako pokrenemo sa
+pytest -v -m "validacija and api"
+nece se pokrenuti ni jedan test, posto samo imamo testove sa markerom validacija
+a ne i sa markerom api, on je samo registrovan primera radi
+
+
+takodje moze i da se kombinuje
+pytest -v -m "smoke and not spor"
+pokrece samo smoke(brze) testove a iskljucuje sve one koji imaju i spor marker
+
+moze i kao u matematici sa zagradama
+pytest -v -m "(smoke or regression) and not spor"
+"""
+
+# XFAIL DETALJI
+@pytest.mark.xfail(reason="bug #1 nije popravljen")
+def test_bug():
+    with pytest.raises(TypeError):
+        kategorija_godina(True)
+# scenario 1 - bug postoji test pada sa xFail (x simbol zuto hahah)
+# sve je kako treba, bug je poznat test to dokumentuje
+
+# scenarioo 2 - bug popravljen test prolazi sa xPass (X simbol zuto)
+# pytest ovde upozorava da je test trebao da padne ali je prosao
+# sto znaci da treba da se ukloni xFail marker i da se zvanicno zatvori bug
+
+
+# sa druge strane strict=True moze da pravi razliku
+# Scenario: bug je bio poznat ali je upravo popravljen
+# funkcija kategorija_godina(True) sada baca TypeError
+# oba testa ocekuju da test padne(xfail), ali ipak prolazi (xpass)
+# raazlika je u tome sta se desi kada test prodje
+
+# test 1 - xfail bez strict
+# ocekujemo da pada ali ce proci jer je bug popravljen
+# rezultat X(xpass) upozorenje, ali ukupan rezultat je passed sa druge strane
+@pytest.mark.xfail(reason="bug #1: bool treba da baci TypeError, nije popravljeno")
+def test_bez_strict():
+    with pytest.raises(TypeError):
+        kategorija_godina(True)
+# Output:
+# test_markeri.py::test_bez_strict XPASS (bug #1: bool treba da baci Typ...) [100%]
+#1 xpassed->pytest kaze "proslo" ali upozorava
+
+
+# test 2 - xfail sa strict=True
+# isti scenario, ista funkcija ali je strict true
+# kada test prodje(xpass) umesto da padne(xfail)
+# pytest prijavljuje failed
+# rezultat je CRVEN 
+@pytest.mark.xfail(strict=True,reason="bug #1: bool treba da baci TypeError, strict mod")
+def test_sa_strict():
+    with pytest.raises(TypeError):
+        kategorija_godina(True)
+# Output:
+# FAILED test_markeri.py::test_sa_strict - [XPASS(strict)] bug #1: bool treba da baci TypeError, strict mod
+#[XPASS(strict)] bug #1: bool treba da baci TypeError, strict mod
+#1 failed->pytest kaze "palo" jer je XPASS sa strict=True greska
+
+# zasto je korisan strict=True
+# zamislite CI/CD pipeline(automatsko testiranje pri svakom commitu)
+# bez stricta: dev popravi bug, test postane xpass, "pipeline zelen"
+# niko ne primeti da treba da ukloni xfail marker
+# marker ostaje zauvek i dokumentacija je losa onda tj. netacna
+# ---------------------------
+# sa strict=True:
+# dev popravi bug, test postane cpass, pipeline crven haha
+# dev ili tester mora da ukloni xfail marker da bi pipeline bio zelen
+# kod ostaje uredan, dokumentacija dobra, markeri su tacni uvek
