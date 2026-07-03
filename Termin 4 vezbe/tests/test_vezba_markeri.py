@@ -10,15 +10,30 @@ from src.biblioteka import Biblioteka,Knjiga
 
 # Zadatak 1 G1
 # Markirati test sa smoke
-# Napisati test koj proverava da se Biblioteka moze klreirati sa zadatim nazivom
+# Napisati test koj proverava da se Biblioteka moze kreirati sa zadatim nazivom
+@pytest.mark.smoke
+def test_biblioteka_create():
+    b=Biblioteka(naziv="Test 1")
+    assert b.naziv=="Test 1"
 
 # Zadatak 2 G1
 # Markirati test sa smoke
 # Napisati test koji proverava da se Knjiga moze dodati u biblioteku i da broj_knjiga() vraca 1 
+@pytest.mark.smoke
+def test_knjiga_add(prazna_biblioteka):
+    prazna_biblioteka.dodaj_knjigu(Knjiga(naslov="Test knjiga",autor="Test autor",godina=2026))
+    assert prazna_biblioteka.broj_knjiga() == 1
 
 # Zadatak 3 G1
 # Markirati test sa smoke
 # Napisati test koji proverava da pozajmi() i vrati() rade osnovni ciklus bez gresaka
+@pytest.mark.smoke
+def test_pozajmi_vrati_init(popunjena_biblioteka):
+    knjiga_id=popunjena_biblioteka.sve_knjige()[0].id
+    popunjena_biblioteka.pozajmi(knjiga_id)
+    assert popunjena_biblioteka.broj_dostupnih()==2
+    popunjena_biblioteka.vrati(knjiga_id)
+    assert popunjena_biblioteka.broj_dostupnih()==3
 
 # ---------------------------------------------------------------------------
 
