@@ -8,8 +8,8 @@
 # 65 - 150 -> "senior"
 def kategorija_godina(godine: int) -> str:
     # ZA DEMO ZA XPASS FIXED BUG za scenario 2 u test_markeri.py
-    if isinstance(godine, bool):
-        raise TypeError("bool nije dozvoljen, ocekivan int")
+    # if isinstance(godine, bool):
+    #     raise TypeError("bool nije dozvoljen, ocekivan int")
     if not isinstance(godine, int):
         raise TypeError(f"Ocekivan int, dobijen {type(godine).__name__}")
     if godine < 0:
