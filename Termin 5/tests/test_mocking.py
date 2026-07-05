@@ -18,10 +18,20 @@ from src.biblioteka_servis import BibliotekaServis,EmailServis,IzvestajServis,Kn
 # testiranje bez slanja pravog email-a se resava sa mock-om, samim tim dobijamo lazni email sercis koji ce se ponasati onako kako mi zelimo i nece slati prave emailove da spamuje
 
 # osnovno testiranje bez mock-a
-# metode koje ne koriste spoljne zavisnosti
+# metode koje ne koriste spoljne zavisnosti!
 def test_dodaj_knjigu(servis):
     knjiga_id=servis.dodaj_knjigu(
         Knjiga(naslov="Baze podataka",autor="Dr Snezana R. Popovic",godina=2024)
     )
     assert servis.broj_knjiga()==1
     assert isinstance(knjiga_id,int)
+
+def test_dodaj_knjigu_bez_naslova(servis):
+    with pytest.raises(ValueError):
+        servis.dodaj_knjigu(
+            Knjiga(naslov="",autor="Dr Snezana R. Popovic",godina=2024)
+        )
+
+
+#testiranje sa mock-om
+# provera da li su spoljni servisi pozvani ispravno
