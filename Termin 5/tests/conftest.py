@@ -1,11 +1,14 @@
 import pytest
 from src.biblioteka_servis import EmailServis,IzvestajServis,BibliotekaServis,Knjiga
-from unittest.mock import MagicMock,call
+from unittest.mock import MagicMock
 
 @pytest.fixture()
 def lazni_email():
     # lazni email servis koji ne salje prave emailove
     return MagicMock(spec=EmailServis)
+# MagicMock(spec=...) mock dozvoljava samo metode koje stvarno postoje na, u ovom
+# slucaju EmailServisu
+# ako pozovemo lazni_email.nepostojecaMetoda() baca AttributeError
 
 @pytest.fixture()
 def lazni_izvestaj():
