@@ -73,7 +73,7 @@ class BibliotekaServis:
         )
 
     def vrati(self, knjiga_id: int, korisnik_email: str) -> None:
-        """Vraca knjigu i salje email korisniku."""
+        # Vraca knjigu i salje email korisniku
         if knjiga_id not in self._knjige:
             raise KeyError(f"Knjiga sa ID={knjiga_id} ne postoji")
         knjiga = self._knjige[knjiga_id]

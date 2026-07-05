@@ -102,6 +102,24 @@ def test_email_se_ne_salje_ako_knjiga_nije_dostupna(servis_sa_knjigom,lazni_emai
 # reset_mock() brise pamcenje mock-a, koristi se kada se isti mock koriti u vise faza testa
 
 
+# Mockovanje fajl sistema
+
+def test_generisi_izvestaj_cuva_fajl(servis_sa_knjigom,lazni_izvestaj):
+    servis,knjiga_id=servis_sa_knjigom
+    servis.generisi_izvestaj("izvestaj.txt")
+    # provera da je fajl servis pozvan sa ispravnom putanjom
+    lazni_izvestaj.sacuvaj_izvestaj.assert_called_once()
+    pozvan_sa=lazni_izvestaj.sacuvaj_izvestaj.call_args#call args izvlaci argumente iz poziva
+    assert pozvan_sa[0][0] == "izvestaj.txt"#prvi pozicioni argument
+
+def test_generisi_izvestaj_vraca_sadrzaj(servis_sa_knjigom):
+    servis,knjiga_id=servis_sa_knjigom
+    sadrzaj=servis.generisi_izvestaj("izvestaj.txt")
+    # sadrzaj treba da sadrzi naziv knjige
+    assert "Baze podataka" in sadrzaj
+
+
+
 
 # pokretanje
 # pytest -v --cov=biblioteka_servis --cov-report=html
