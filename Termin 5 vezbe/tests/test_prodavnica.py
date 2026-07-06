@@ -83,6 +83,17 @@ def test_kupi_smanjuje_kolicinu(prodavnica_sa_proizvodom,lazno_placanje):
 # Napisati test koji proverava da kupi() poziva placanje servis
 # sa ispravnim iznosom
 # Slusalice kostaju 3500, kupujemo 2,ocekujemo naplatu 7000.0
+def test_kupi_placanje(prodavnica_sa_proizvodom,lazno_placanje):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    prodavnica.kupi(proizvod_id,2,"0641234567","1234-5678-9012-3456")
+    naplata_argumenti=lazno_placanje.naplati.call_args
+    print(naplata_argumenti)
+    assert naplata_argumenti[0][0]==7000.0
+    # moze i sa assert_called_once_with() ako se i kartica proverava
+    lazno_placanje.naplati.assert_called_once_with(
+        7000.0,
+        "1234-5678-9012-3456"
+    )
 
 # Zadatak 2 G4
 # Napisati test koji proverava da se SMS NE salje ako placanje ne uspe.
@@ -90,6 +101,12 @@ def test_kupi_smanjuje_kolicinu(prodavnica_sa_proizvodom,lazno_placanje):
 #   lazno_placanje.naplati.return_value = False (placanje pada)
 #   kupi() treba da baci ValueError
 #   SMS NE sme biti poslat
+def test_sms_neuspesno_placanje(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=False
+    with pytest.raises(ValueError):
+        prodavnica.kupi(proizvod_id,2,"0641234567","1234-5678-9012-3456")
+    lazni_sms.posalji.assert_not_called()
 
 
 #  GRUPA 5 — Testiranje vracanja proizvoda
