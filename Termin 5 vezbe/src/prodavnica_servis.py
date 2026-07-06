@@ -81,7 +81,7 @@ class ProdavnicaServis:
         # Spoljni poziv — u testovima mockujemo!
         self._sms.posalji(
             telefon,
-            f'Kupovina potvrdjana: {kolicina}x "{proizvod.naziv}" za {ukupno} din.',
+            f'Kupovina potvrdjena: {kolicina}x "{proizvod.naziv}" za {ukupno} din.',
         )
 
         return ukupno
