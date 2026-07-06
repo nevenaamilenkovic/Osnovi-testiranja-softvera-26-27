@@ -124,13 +124,21 @@ def test_vrati_proizvod_sms(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
         "0641234567",
         'Vracanje primljeno: 1x "Slusalice". Hvala!'
     )
-    assert prodavnica.dostupna_kolicina(proizvod_id) == 9
+    # moze ali nije trazeno u ovom zadatku
+    # assert prodavnica.dostupna_kolicina(proizvod_id) == 9
 
-    
+
 # Zadatak 2 G5
 # Napisati test koji proverava da vrati_proizvod() uvecava kolicinu
 # Pre vracanja kupi 3 komada, pa vrati 2.
 # Na kraju treba biti: 10-3+2 = 9 komada
+def test_vrati_proizvod_uvecava_kolicinu(prodavnica_sa_proizvodom,lazno_placanje,lazni_sms):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=True
+    prodavnica.kupi(proizvod_id,3,"0641234567","1234-5678-9012-3456")
+    lazni_sms.reset_mock()
+    prodavnica.vrati_proizvod(proizvod_id,2,"0641234567")
+    assert prodavnica.dostupna_kolicina(proizvod_id) == 9
 
 
 # GRUPA 6 — Error grane (za coverage)
