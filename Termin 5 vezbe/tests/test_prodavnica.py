@@ -13,14 +13,24 @@ def test_dodaj_proizvod(prodavnica):
     proizvod_id=prodavnica.dodaj_proizvod(
         Proizvod(naziv="Telefon",cena=85990.99,kolicina=2)
     )
+    assert isinstance(proizvod_id,int)
     assert proizvod_id==1
 
 # Zadatak 2 G2
 # Napisati test koji proverava da dodaj_proizvod() sa praznim nazivom baca ValueError
-
+def test_dodaj_proizvod_bez_naziva(prodavnica):
+    with pytest.raises(ValueError):
+        prodavnica.dodaj_proizvod(
+            Proizvod(naziv="",cena=85990.99,kolicina=2)
+        )
 
 # Zadatak 3 G2
 # Napisati test koji proverava da dodaj_proizvod() sa cenom 0 baca ValueError
+def test_dodaj_proizvod_besplatan(prodavnica):
+    with pytest.raises(ValueError):
+        prodavnica.dodaj_proizvod(
+            Proizvod(naziv="Telefon",cena=0,kolicina=2)
+        )
 
 # GRUPA 3 — Testiranje SMS-a pri kupovini
 # Zadatak 1 G3
