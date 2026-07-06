@@ -88,3 +88,28 @@ def test_dodaj_vise_knjiga(servis):
 
 
 # integracija pozajmljivanja i vracanja knjiga
+def test_pozajmi_menja_dostupnost(servis_sa_knjigama):
+    # pozajmi() zzapravo menja stanje knjige, ne poziva mock!!!
+    servis_sa_knjigama.pozajmi(1,"nevena@test.com")
+    # 3 knjige ukupno, jedna pozajmljena, a dve dostupne
+    assert servis_sa_knjigama.broj_knjiga()==3
+    assert servis_sa_knjigama.broj_dostupnih()==2
+
+def test_pozajmi_pa_vrati(servis_sa_knjigama):
+    # kompletan ciklus pozajmljivanja i vracanja
+    # provera dostupnosti pre i nakon vracanja
+    servis_sa_knjigama.pozajmi(1,"nevena@test.com")
+    assert servis_sa_knjigama.broj_dostupnih()==2
+    
+    servis_sa_knjigama.vrati(1,"nevena@test.com")
+    assert servis_sa_knjigama.broj_dostupnih()==3
+
+def test_pozajmljivanje_iste_knjige(servis_sa_knjigama):
+    # nije moguce pozajmiti knjigu dva puta
+    # provera da servis cuva stanje pozajmica
+    servis_sa_knjigama.pozajmi(1,"nevena@test.com")
+    with pytest.raises(ValueError):
+        servis_sa_knjigama.pozajmi(1,"maci@test.com")
+
+
+# integracioni sa fajl sistemom
