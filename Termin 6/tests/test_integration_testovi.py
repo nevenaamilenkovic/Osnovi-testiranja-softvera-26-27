@@ -66,4 +66,25 @@ Baza podataka                           mock        ponekad pravi(test DB)
 # u sustini spoljni servisi koji kostaju ili salju stvarne poruke i slicno se uvek mockuju bez obzira na vrstu testa
 
 
-#
+#Osnovna integracija - dodavanje i citanje
+def test_dodaj_i_prebroj_knjige(servis):
+    # integration test u kome dodaj_knjigu zapravo dodaje knjigu a broj_knjiga zapravo broji
+    # arrange
+    knjiga=Knjiga("Baze podataka","Snezana Popovic",2024)
+    # act
+    servis.dodaj_knjigu(knjiga)
+    # assert
+    assert servis.broj_knjiga()==1
+    assert servis.broj_dostupnih()==1
+
+def test_dodaj_vise_knjiga(servis):
+    # vise knjiga radi provere da li brojac knjiga radi ispravno
+    servis.dodaj_knjigu(Knjiga("Knjiga A", "Autor A", 2020))
+    servis.dodaj_knjigu(Knjiga("Knjiga B", "Autor B", 2021))
+    servis.dodaj_knjigu(Knjiga("Knjiga C", "Autor C", 2022))
+    
+    assert servis.broj_knjiga()==3
+    assert servis.broj_dostupnih()==3
+
+
+# integracija pozajmljivanja i vracanja knjiga
