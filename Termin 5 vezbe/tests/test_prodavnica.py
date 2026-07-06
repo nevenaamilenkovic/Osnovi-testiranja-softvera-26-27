@@ -56,12 +56,26 @@ def test_kupi_sms(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
 # Napisati test koji proverava TACNE argumente SMS-a pri kupovini:
 #telefon: "0641234567"
 #poruka treba da sadrzi naziv proizvoda i ukupan iznos
-
+@pytest.mark.xfail(reason="bug 1: poruka sadrzi potvrdjana umesto potvrdjena ")
+def test_kupi_sms_argumenti(prodavnica_sa_proizvodom,lazni_sms):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    prodavnica.kupi(proizvod_id,1,"0641234567","1234-5678-9012-3456")
+    lazni_sms.posalji.assert_called_once_with(
+        "0641234567",
+        'Kupovina potvrdjena: 1x "Slusalice" za 3500.0 din.'
+    )
+    # slovna greska pogresan text u poruci test pada!!!
+    #Bug 1 - ISPRAVITI PORUKU U KODU!!!
 
 # Zadatak 3 G3
 # Napisati test koji proverava da kupi() smanjuje kolicinu na stanju.
 # Ako je bilo 10, nakon kupovine 3 treba da bude 7.
 # Koristiti dostupna_kolicina() za proveru.
+def test_kupi_smanjuje_kolicinu(prodavnica_sa_proizvodom,lazno_placanje):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=True
+    prodavnica.kupi(proizvod_id,3,"0641234567","1234-5678-9012-3456")
+    assert prodavnica.dostupna_kolicina(proizvod_id)==7
 
 
 # GRUPA 4 — Testiranje placanja
