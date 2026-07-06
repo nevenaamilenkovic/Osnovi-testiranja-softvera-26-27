@@ -9,7 +9,11 @@ from src.prodavnica_servis import ProdavnicaServis, SmsServis, PlacanjeServis, P
 # Zadatak 1 G2
 # Napisati test koji proverava da dodaj_proizvod() vraca int ID.
 # Koristiti fixture prodavnica.
-
+def test_dodaj_proizvod(prodavnica):
+    proizvod_id=prodavnica.dodaj_proizvod(
+        Proizvod(naziv="Telefon",cena=85990.99,kolicina=2)
+    )
+    assert proizvod_id==1
 
 # Zadatak 2 G2
 # Napisati test koji proverava da dodaj_proizvod() sa praznim nazivom baca ValueError
