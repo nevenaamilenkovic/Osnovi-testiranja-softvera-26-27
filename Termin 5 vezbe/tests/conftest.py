@@ -1,9 +1,23 @@
+import pytest
+from src.prodavnica_servis import SmsServis,PlacanjeServis,ProdavnicaServis
+from unittest.mock import MagicMock,call
+
 # Zadatak 1 G1
 # Napraviti tri fixture-a:
-#
 #   lazni_sms — MagicMock sa spec=SmsServis
 #   lazno_placanje — MagicMock sa spec=PlacanjeServis
 #   prodavnica — ProdavnicaServis koji koristi lazni_sms i lazno_placanje
+@pytest.fixture()
+def lazni_sms():
+    return MagicMock(spec=SmsServis)
+
+@pytest.fixture()
+def lazno_placanje():
+    return MagicMock(spec=PlacanjeServis)
+
+@pytest.fixture()
+def prodavnica(lazni_sms,lazno_placanje):
+    return ProdavnicaServis(lazni_sms,lazno_placanje)
 
 
 # Zadatak 2 G1
