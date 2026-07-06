@@ -113,8 +113,20 @@ def test_sms_neuspesno_placanje(prodavnica_sa_proizvodom,lazni_sms,lazno_placanj
 # Zadatak 1 G5
 # Napisati test koji proverava da vrati_proizvod() salje SMS
 # Koristiti prodavnica_sa_proizvodom.
+def test_vrati_proizvod_sms(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=True
+    prodavnica.kupi(proizvod_id,2,"0641234567","1234-5678-9012-3456")
+    lazni_sms.reset_mock()
+    prodavnica.vrati_proizvod(proizvod_id,1,"0641234567")
 
+    lazni_sms.posalji.assert_called_once_with(
+        "0641234567",
+        'Vracanje primljeno: 1x "Slusalice". Hvala!'
+    )
+    assert prodavnica.dostupna_kolicina(proizvod_id) == 9
 
+    
 # Zadatak 2 G5
 # Napisati test koji proverava da vrati_proizvod() uvecava kolicinu
 # Pre vracanja kupi 3 komada, pa vrati 2.
