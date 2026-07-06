@@ -57,8 +57,9 @@ def test_kupi_sms(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
 #telefon: "0641234567"
 #poruka treba da sadrzi naziv proizvoda i ukupan iznos
 @pytest.mark.xfail(reason="bug 1: poruka sadrzi potvrdjana umesto potvrdjena ")
-def test_kupi_sms_argumenti(prodavnica_sa_proizvodom,lazni_sms):
+def test_kupi_sms_argumenti(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
     prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=True
     prodavnica.kupi(proizvod_id,1,"0641234567","1234-5678-9012-3456")
     lazni_sms.posalji.assert_called_once_with(
         "0641234567",
@@ -88,7 +89,7 @@ def test_kupi_placanje(prodavnica_sa_proizvodom,lazno_placanje):
     prodavnica.kupi(proizvod_id,2,"0641234567","1234-5678-9012-3456")
     naplata_argumenti=lazno_placanje.naplati.call_args
     print(naplata_argumenti)
-    assert naplata_argumenti[0][0]==7000.0
+    # assert naplata_argumenti[0][0]==7000.0
     # moze i sa assert_called_once_with() ako se i kartica proverava
     lazno_placanje.naplati.assert_called_once_with(
         7000.0,
@@ -140,25 +141,86 @@ def test_vrati_proizvod_uvecava_kolicinu(prodavnica_sa_proizvodom,lazno_placanje
     prodavnica.vrati_proizvod(proizvod_id,2,"0641234567")
     assert prodavnica.dostupna_kolicina(proizvod_id) == 9
 
+# COVERAGE 86%
+
 
 # GRUPA 6 — Error grane (za coverage)
 # Zadatak 1 G6
 # Napisati test koji proverava da kupi() sa nepostojecim ID-em baca KeyError.
-
+def test_kupi_nepostojeci_id(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    proizvod_id=999
+    with pytest.raises(KeyError):
+        prodavnica.kupi(proizvod_id,3,"0641234567","1234-5678-9012-3456")
 
 # Zadatak 2 G6
 # Napisati test koji proverava da kupi() baca ValueError kada je trazena
 # kolicina veca od dostupne
 # Primer: dostupno je 10, trazimo 20.
-
+def test_kupi_kolicina_veca_od_dostupne(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    with pytest.raises(ValueError):
+        prodavnica.kupi(proizvod_id,15,"0641234567","1234-5678-9012-3456")
 
 # Zadatak 3 G6
 # Napisari test koji proverava da vrati_proizvod() sa nepostojecim ID-em baca KeyError
+def test_vrati_proizvod_nespostojeci_id(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    prodavnica.kupi(proizvod_id,3,"0641234567","1234-5678-9012-3456")
+    proizvod_id=999
+    with pytest.raises(KeyError):
+        prodavnica.vrati_proizvod(proizvod_id,2,"0641234567")
 
 
 
-# Pokrenuti coverage i dostici iznad 90%
+# Pokrenuti coverage i dostici iznad 90% 
 # dokumentovati izvestaj (ako je cli report u komentaru, ako je html on ce svakako biti tu)
+"""
+Name                                                                                              Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------------------------------------------------------------
+F:prodavnica_servis.py      50      4    92%   41, 96, 109, 114
+-------------------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                                50      4    92%
+"""
 # dodai i komande koje ste slali u cli
+# pytest --cov=src --cov-report=term-missing
+
 # ukoliko ima smisla, nakon izvestaja, pokriti i linije/funkcije/grane koje nisu
 # pokrivene testovima
+
+# negativna kolicina kod dodatog proizvoda linija 41
+def test_dodaj_proizvod_negativna_kolicina(prodavnica):
+    with pytest.raises(ValueError) as exec_info:
+        prodavnica.dodaj_proizvod(
+            Proizvod(naziv="Test",kolicina=-1,cena=100)
+        )
+    assert "negativna" in str(exec_info)
+
+# COVERAGE 94
+
+# (negativna)kolicina manja od nule kod vracanja proizvoda linija 96
+# kolicina mora biti veca od nulee!!
+def test_vrati_proizvod_negativna_kolicina(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    prodavnica.kupi(proizvod_id,3,"0641234567","1234-5678-9012-3456")
+    with pytest.raises(ValueError):
+        prodavnica.vrati_proizvod(proizvod_id,0,"0641234567")
+
+# COVERAGE 96%
+
+# linija 109 metoda za vracanje ukupnog broja razlicitih proizvoda u prodavnici
+def test_broj_proizvoda(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    #MOZE DA SE DODA JOS JEDAN PROIZVOD U PRODAVNICU PO ZELJI
+    assert prodavnica.broj_proizvoda()==1 
+
+
+# linija 114 metoda za proveru dostupne kolicine, ako je proizvod id nepostojeci treba da baci KeyError
+def test_dostupna_kolicina_nepostojeci_id(prodavnica_sa_proizvodom):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    proizvod_id=999
+    with pytest.raises(KeyError) as exec_info:
+        prodavnica.dostupna_kolicina(proizvod_id)
+    assert str(proizvod_id) in str(exec_info)
+
+# COVERAGE 100%
