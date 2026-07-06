@@ -20,7 +20,7 @@ class EmailServis:
 class IzvestajServis:
     # Generise izvestaje — cita/pise fajlove
     def sacuvaj_izvestaj(self, putanja: str, sadrzaj: str) -> None:
-        with open(putanja, "w") as f:
+        with open(putanja, "w",encoding="utf-8") as f:
             f.write(sadrzaj)
 
     def ucitaj_izvestaj(self, putanja: str) -> str:

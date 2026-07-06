@@ -19,7 +19,7 @@ def unit_servis(lazni_email,lazni_izvestaj):
 @pytest.fixture()
 def pravi_izvestaj():
     # zaista pise fajlove!
-    return IzvestajServis
+    return IzvestajServis()
 
 @pytest.fixture()
 def servis(lazni_email,pravi_izvestaj):

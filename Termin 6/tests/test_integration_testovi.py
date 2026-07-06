@@ -113,3 +113,37 @@ def test_pozajmljivanje_iste_knjige(servis_sa_knjigama):
 
 
 # integracioni sa fajl sistemom
+def test_generisi_izvestaj_pravi_fajl(servis_sa_knjigama,tmp_path):
+    putanja=tmp_path/"izvestaj.txt"
+    servis_sa_knjigama.generisi_izvestaj(str(putanja))
+    assert putanja.exists()#provera da li fajl zapravo postoji
+
+def test_generisi_izvestaj_sadrzaj(servis_sa_knjigama,tmp_path):
+    putanja=tmp_path/"izvestaj.txt"
+    servis_sa_knjigama.generisi_izvestaj(str(putanja))
+    sadrzaj=putanja.read_text()
+    assert "Python bez oklevanja" in sadrzaj
+    assert "Baze podataka" in sadrzaj
+    assert "Go bez oklevanja" in sadrzaj
+
+def test_generisi_izvestaj_status_knjige(servis_sa_knjigama,tmp_path):
+    # pozajmi prvu knjigu
+    servis_sa_knjigama.pozajmi(1,"nevena@test.com")
+    # napravi izvestaj
+    putanja=tmp_path/"izvestaj.txt"
+    servis_sa_knjigama.generisi_izvestaj(str(putanja))
+    # procitaj izvestaj
+    sadrzaj=putanja.read_text()
+    # provera da je knjiga 1 pozajmljena
+    assert "pozajmljena" in sadrzaj
+    # knjige 2 i 3 treba da budu dostupne
+    assert "dostupna" in sadrzaj
+
+
+# integracioni email+stanje kombinovano
+def test_email_se_salje_pri_pozajmljivanju(servis_sa_knjigama,lazni_email):
+    # kombinovani test
+    # pravi servis, pravi izvestaj, mock email
+    servis_sa_knjigama.pozajmi(1,"nevena@test.com")
+    assert servis_sa_knjigama.broj_dostupnih()==2
+    lazni_email.posalji.assert_called_once()
