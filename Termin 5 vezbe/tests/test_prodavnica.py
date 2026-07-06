@@ -36,10 +36,20 @@ def test_dodaj_proizvod_besplatan(prodavnica):
 # Zadatak 1 G3
 # Napisati test koji proverava da kupi() poziva SMS servis tacno jednom.
 # Koristiti: prodavnica_sa_proizvodom i lazni_sms.
-#
 # VAZNO: lazno_placanje mora da vraca True (placanje uspeva)
 # Postaviti return_value na laznom placanju pre poziva kupi().
 #   lazno_placanje.naplati.return_value = True
+def test_kupi_sms(prodavnica_sa_proizvodom,lazni_sms,lazno_placanje):
+    prodavnica,proizvod_id=prodavnica_sa_proizvodom
+    lazno_placanje.naplati.return_value=True
+    
+    prodavnica.kupi(
+        proizvod_id=proizvod_id,
+        kolicina=1,
+        telefon="0651234567",
+        kartica="1234-5678-9012-3456",
+    )
+    lazni_sms.posalji.assert_called_once()
 
 
 # Zadatak 2 G3

@@ -51,7 +51,7 @@ class ProdavnicaServis:
         return novi.id
 
     def kupi(self, proizvod_id: int, kolicina: int, telefon: str, kartica: str) -> float:
-
+# kartica je broj kartice debitne itd 1234-5678-9012-3456
         # Kupovina proizvoda
         # 1. Proverava da li postoji i ima dovoljno na stanju
         # 2. Naplacuje placanje
