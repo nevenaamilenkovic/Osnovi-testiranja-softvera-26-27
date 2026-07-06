@@ -17,10 +17,14 @@
 # Integration testira saradnju izmedju slojeva, bez mockova za interne komponente
 # E2E(end to end) testira ceo sistem s kraja na kraj (UI,API,DB-sve zajedno)
 
+import pytest
+from src.biblioteka_servis import EmailServis,IzvestajServis,BibliotekaServis,Knjiga
 # razlika u kodu
 # UNIT TEST -> MOCK ZA SVE SPOLJNE ZAVISNOSTI
-def test_unit():
-    pass
+def test_unit(unit_servis,lazni_izvestaj):
+    unit_servis.generisi_izvestaj("izvestaj.txt")
+    lazni_izvestaj.sacuvaj_izvestaj.assert_called_once()
+# provervamo samo da li je servis pozvan a ne sta je zaista upisano u fajl!
 
 # INTEGRATION TEST -> PRAVI OBJEKTI, PRAVI FAJLOVI
 def test_integration():
